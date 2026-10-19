@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>V9 PRO - Dream11 Level</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial}
+body{background:#0E0E12;color:#fff;padding-bottom:90px}
+.header{position:sticky;top:0;z-index:10;background:linear-gradient(90deg,#d00000,#ffba00);padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.header b{font-size:20px;color:#000}
+.nav{display:flex;gap:8px;padding:10px;background:#16161D;overflow:auto}
+.nav span{background:#222;padding:7px 14px;border-radius:20px;font-size:13px;white-space:nowrap;border:1px solid #333}
+.nav span.active{background:#FFD700;color:#000;font-weight:800}
+.card{background:#1C1C24;border:1px solid #2A2A35;border-radius:16px;margin:10px;padding:12px}
+.row{display:flex;justify-content:space-between;align-items:center}
+.bal{font-size:26px;font-weight:900;color:#FFD700}
+.btn-small{background:#FFD700;color:#000;border:none;padding:6px 14px;border-radius:20px;font-weight:800;font-size:12px}
+.timer{text-align:center;font-size:14px;color:#00ff7f;font-weight:800;margin:8px}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.num{background:#23232F;border:1.5px solid #3A3A4A;height:62px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900}
+.num.sel{background:#FFD700;color:#000;box-shadow:0 0 18px #FFD700;transform:scale(1.05)}
+.num.win{background:#00FF7F;color:#000;box-shadow:0 0 18px #00FF7F}
+.bigbtn{width:calc(100% - 20px);margin:10px;background:linear-gradient(90deg,#FF0000,#FF8C00);color:#fff;border:none;padding:16px;border-radius:14px;font-weight:900;font-size:17px;position:fixed;bottom:10px;left:10px;z-index:20}
+.history{max-height:140px;overflow:auto;font-size:12px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+</style>
+</head>
+<body>
+<div class="header"><b>👑 V9 PRO</b><div><span style="background:#000;color:#0f0;padding:4px 10px;border-radius:20px;font-size:11px">● LIVE</span> <span style="background:#000;color:#fff;padding:4px 10px;border-radius:20px;font-size:11px">Rs.<span id="bal">100</span></span></div></div>
+<div class="nav"><span class="active">🎮 Quick Game</span><span>🏆 Leaderboard</span><span>💰 My Wallet</span><span>📜 History</span></div>
+
+<div class="card row"><div><div style="color:#aaa;font-size:12px">TOTAL WALLET</div><div class="bal">Rs.<span id="bal2">100</span></div><div style="font-size:11px;color:#aaa">Bonus: Rs.20 • Winning: Rs.<span id="winbal">0</span></div></div><div><button class="btn-small" onclick="addBal()">+ ADD CASH</button><br><button class="btn-small" style="margin-top:6px;background:#222;color:#fff;border:1px solid #444" onclick="withdraw()">WITHDRAW</button></div></div>
+
+<div class="timer" id="timer">⏱ Next Result in: 30s • 10 Lagao 18 Jeeto</div>
+
+<div class="card"><div class="row" style="margin-bottom:10px"><b>Select Number (0-9)</b><span style="font-size:12px;color:#aaa" onclick="clr()">CLEAR</span></div><div class="grid" id="grid"></div></div>
+
+<div class="card"><div class="row"><b>📜 Last Results</b><span style="font-size:11px;color:#aaa">Live History</span></div><div class="history" id="hist">Abhi tak koi result nahi BOSS!</div></div>
+
+<div class="card" id="resBox" style="text-align:center;font-weight:700">BOSS Number Select Karo! Dream11 Jaisa Game Hai!</div>
+
+<button class="bigbtn" onclick="bet()">⚡ Rs.10 LAGAO - Rs.18 JEETO ⚡</button>
+
+<script>
+let bal=parseInt(localStorage.getItem('v9_bal')||'100'), winBal=parseInt(localStorage.getItem('v9_win')||'0'), sel=null, hist=[];
+let balEl=document.getElementById('bal'), bal2=document.getElementById('bal2'), winEl=document.getElementById('winbal'), grid=document.getElementById('grid'), resBox=document.getElementById('resBox'), histEl=document.getElementById('hist');
+function upd(){balEl.innerText=bal; bal2.innerText=bal; winEl.innerText=winBal; localStorage.setItem('v9_bal',bal); localStorage.setItem('v9_win',winBal);}
+for(let i=0;i<10;i++){let d=document.createElement('div');d.className='num';d.innerText=i;d.onclick=()=>{document.querySelectorAll('.num').forEach(e=>e.classList.remove('sel'));d.classList.add('sel');sel=i;resBox.innerHTML=`✅ <b>${i}</b> Locked! Bet Dabao BOSS!`};grid.appendChild(d)}
+upd();
+function clr(){sel=null;document.querySelectorAll('.num').forEach(e=>e.className='num');}
+function addBal(){bal+=100;upd();resBox.innerHTML='💰 Rs.100 Added! (Demo)';}
+function withdraw(){if(winBal<50){resBox.innerHTML='❌ Min Withdraw Rs.50 Chahiye BOSS!';return}resBox.innerHTML=`✅ Rs.${winBal} Withdraw Request Sent!`; winBal=0; upd();}
+function bet(){
+if(sel===null){resBox.innerHTML='❌ Pehle Number Chuno BOSS!';return}
+if(bal<10){resBox.innerHTML='❌ Balance Low! Add Cash Karo!';return}
+bal-=10;upd();
+let forced=localStorage.getItem('v9_force'); let winNum=forced!==null&&forced!==''?parseInt(forced):Math.floor(Math.random()*10);
+if(forced!==null&&forced!=='')localStorage.removeItem('v9_force');
+document.querySelectorAll('.num').forEach(e=>e.classList.remove('win'));
+document.querySelectorAll('.num')[winNum].classList.add('win');
+let item=`<div style="margin:4px 0"><span class="dot" style="background:${winNum===sel?'#00ff7f':'#ff4444'}"></span>Num: ${winNum} | Tum: ${sel} | ${winNum===sel?'WIN +18':'LOSS -10'} | ${new Date().toLocaleTimeString()}</div>`;
+hist.unshift(item); histEl.innerHTML=hist.slice(0,10).join('');
+if(winNum===sel){bal+=10;winBal+=8;upd();resBox.innerHTML=`🎉 JACKPOT BOSS! ${winNum} Aaya! Rs.18 Win!`;}
+else{resBox.innerHTML=`💔 Result: ${winNum} Aaya! Tumhara ${sel} tha!`;}
+}
+// Timer fake
+let t=30;setInterval(()=>{t--; if(t<=0)t=30; document.getElementById('timer').innerText=`⏱ Next Result in: ${t}s • 10 Lagao 18 Jeeto`;},1000);
+</script>
+</body>
+</html>
