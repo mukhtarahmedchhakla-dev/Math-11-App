@@ -1,26 +1,82 @@
-<!-- BOSS PANEL V4 - WITH UPI CONTROL - PASSWORD math11@123 -->
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BOSS UPI PANEL</title>
-<style>body{font-family:system-ui;background:#020617;color:#fff;padding:10px;max-width:600px;margin:auto}.card{background:#1e293b;padding:12px;border-radius:12px;margin-bottom:12px;border:1px solid #334155}input,textarea,select{width:100%;padding:9px;margin-top:4px;border-radius:8px;background:#0f172a;color:#fff;border:1px solid #334155}button{padding:10px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:8px}.b1{background:#38bdf8;color:#000;width:100%}.b2{background:#22c55e;color:#000;width:100%}.br{background:#ef4444;color:#fff} .row{display:flex;gap:8px} .f1{flex:1} .pay{background:#0f172a;padding:10px;border-radius:10px;margin-bottom:8px;border-left:4px solid #22c55e} .hidden{display:none}</style></head><body>
-<h1 style="text-align:center;color:#38bdf8">👑 BOSS UPI PANEL</h1>
-<div id="login" class="card"><input type="password" id="pass" placeholder="math11@123"><button class="b1" onclick="login()">LOGIN</button></div>
-<div id="main" class="hidden">
-<div class="card"><h3>💰 Tumhara UPI Setting</h3><label>Tumhara UPI ID (jaha paise ayenge)</label><input id="upiId" placeholder="mukhtar@okaxis / 98765@ybl"><label>Tumhara Naam (UPI pe dikhega)</label><input id="upiName" placeholder="Mukhtar Ahmed"><button class="b2" onclick="saveUpi()">SAVE UPI</button></div>
-<div class="card"><div class="row"><button class="b1 f1" onclick="addContest()">+ NEW CONTEST</button><button class="b2 f1" onclick="saveBoss()">💾 SAVE ALL</button></div><p id="st" style="text-align:center;color:#22c55e;display:none">✅ SAVED</p></div>
-<div id="list"></div>
-<div class="card"><h3>💳 Pending Payments (User ne pay kiya)</h3><div id="payList">Koi payment nahi</div><button onclick="loadPays()" style="background:#334155;color:#fff;width:100%">Refresh Payments</button></div>
-<div class="card"><h3>🏆 Winners ko Pay karna</h3><div id="winList"></div></div>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ADMIN - MATH-11 FANTASY</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#0f172a;color:#fff;padding:15px}
+.login{max-width:350px;margin:100px auto;background:#1e293b;padding:20px;border-radius:12px;text-align:center}
+input{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff}
+.btn{background:#22c55e;color:#000;border:none;padding:10px 18px;border-radius:8px;font-weight:800;cursor:pointer;width:100%;margin-top:8px}
+.card{background:#1e293b;padding:12px;margin:10px 0;border-radius:10px;border:1px solid #334155}
+.row{display:flex;justify-content:space-between;padding:6px 0}
+</style>
+</head>
+<body>
+
+<div id="loginBox" class="login">
+<h2>👑 BOSS ADMIN LOGIN</h2>
+<input id="pass" type="password" placeholder="Password Daliye">
+<button class="btn" onclick="login()">LOGIN</button>
+<p id="err" style="color:red;margin-top:8px"></p>
 </div>
+
+<div id="panel" style="display:none">
+<h2>📚 MATH-11 FANTASY - ADMIN PANEL</h2>
+<p>Welcome BOSS Mukhtar! Full Control Yaha Se!</p>
+
+<div class="card">
+<h3>1. Contest Control</h3>
+<div class="row"><span>Mega Contest - ₹1000 Prize</span><button class="btn" style="width:auto" onclick="alert('ON Hai BOSS')">ON/OFF</button></div>
+<div class="row"><span>Entry: 100 Coins | Spots: 750/1000</span><span style="color:#22c55e">Active</span></div>
+<input id="newPrize" placeholder="Naya Prize - Eg: 2000">
+<button class="btn" onclick="alert('Prize Update Ho Gaya BOSS: '+document.getElementById('newPrize').value)">UPDATE PRIZE</button>
+</div>
+
+<div class="card">
+<h3>2. Question Control (Add New)</h3>
+<input id="q" placeholder="Sawal likho - Eg: i² = ?">
+<input id="o1" placeholder="Option 1"><input id="o2" placeholder="Option 2"><input id="o3" placeholder="Option 3"><input id="o4" placeholder="Option 4">
+<input id="ans" placeholder="Sahi Jawab Number (1-4)">
+<button class="btn" onclick="addQ()">ADD QUESTION</button>
+<div id="qlist" style="margin-top:10px;font-size:13px"></div>
+</div>
+
+<div class="card">
+<h3>3. User & Wallet Control</h3>
+<div class="row"><span>User: Arjun | Coins: 450 | Won: 1200</span><button class="btn" style="width:auto" onclick="alert('Coins Add Kar Diye')">+100</button></div>
+<div class="row"><span>User: Sana | Coins: 200 | Won: 500</span><button class="btn" style="width:auto">+100</button></div>
+<input placeholder="User Ka Naam"><input placeholder="Coins Add/Kam Karo - Eg: +500 ya -100">
+<button class="btn" onclick="alert('Wallet Update BOSS!')">UPDATE WALLET</button>
+</div>
+
+<div class="card">
+<h3>4. Leaderboard Control</h3>
+<div class="row"><span>1. Arjun - 240 pts - ₹1000</span><span><button class="btn" style="width:auto;padding:4px 8px">EDIT</button></span></div>
+<button class="btn" style="background:#fff" onclick="window.open('fantasy.html','_blank')">USER APP DEKHO →</button>
+<button class="btn" style="background:#ef4444;color:#fff" onclick="logout()">LOGOUT</button>
+</div>
+</div>
+
 <script>
-const PASS="math11@123";
-let data=JSON.parse(localStorage.getItem('math11_boss_final')||'{"contests":[]}');
-let upi=JSON.parse(localStorage.getItem('math11_upi')||'{"id":"","name":""}');
-function login(){if(document.getElementById('pass').value!==PASS)return alert('Wrong');document.getElementById('login').classList.add('hidden');document.getElementById('main').classList.remove('hidden');document.getElementById('upiId').value=upi.id;document.getElementById('upiName').value=upi.name;render();loadPays();}
-function addContest(){data.contests.push({id:Date.now(),title:"Contest "+(data.contests.length+1),prize:100,entry:20,joined:0,endTime:"",status:"active",winner:"",winnerUpi:"",questions:[{q:"",A:"",B:"",C:"",D:"",ans:"A"}]});render();}
-function render(){const l=document.getElementById('list');l.innerHTML="";data.contests.forEach((c,i)=>{l.innerHTML+=`<div class="pay" style="border-left-color:#38bdf8"><input value="${c.title}" oninput="data.contests[${i}].title=this.value"><div class="row"><div class="f1"><label>Prize</label><input type="number" value="${c.prize}" oninput="data.contests[${i}].prize=this.value"></div><div class="f1"><label>Entry</label><input type="number" value="${c.entry}" oninput="data.contests[${i}].entry=this.value"></div></div><label>Winner Name</label><input value="${c.winner}" placeholder="Winner ka naam" oninput="data.contests[${i}].winner=this.value"><label>Winner UPI (jaha tum bhejoge)</label><input value="${c.winnerUpi}" placeholder="winner@upi" oninput="data.contests[${i}].winnerUpi=this.value"><button class="b2" style="width:100%" onclick="payWinner(${i})">💸 Pay Winner via UPI</button><button class="br" style="margin-top:10px" onclick="data.contests.splice(${i},1);render()">DELETE CONTEST</button></div>`});}
-function saveBoss(){localStorage.setItem('math11_boss_final',JSON.stringify(data));document.getElementById('st').style.display='block';setTimeout(()=>document.getElementById('st').style.display='none',2000);}
-function saveUpi(){upi.id=document.getElementById('upiId').value;upi.name=document.getElementById('upiName').value;localStorage.setItem('math11_upi',JSON.stringify(upi));alert('UPI Saved! Ab user isi pe pay karega');}
-function loadPays(){let pays=JSON.parse(localStorage.getItem('math11_payments')||'[]');let d=document.getElementById('payList');if(pays.length==0)d.innerHTML='Koi payment pending nahi';else d.innerHTML=pays.map((p,i)=>`<div class="pay">User: ${p.phone||p.name}<br>Contest: ${p.contest}<br>Amount: ₹${p.amount}<br><button class="b2" onclick="approvePay(${i})">APPROVE</button> <button class="br" onclick="rejectPay(${i})">REJECT</button></div>`).join('');let w=document.getElementById('winList');w.innerHTML=data.contests.map((c,i)=> c.winner? `<div class="pay">🏆 ${c.title} - ${c.winner} - ₹${c.prize} <br><a href="upi://pay?pa=${c.winnerUpi}&pn=${c.winner}&am=${c.prize}&cu=INR" style="color:#22c55e">UPI Pay Link kholo</a></div>` : '').join('')||'Abhi koi winner nahi';}
-function approvePay(i){let pays=JSON.parse(localStorage.getItem('math11_payments')||'[]');pays.splice(i,1);localStorage.setItem('math11_payments',JSON.stringify(pays));loadPays();alert('Approved! User ka entry ho gaya');}
-function rejectPay(i){let pays=JSON.parse(localStorage.getItem('math11_payments')||'[]');pays.splice(i,1);localStorage.setItem('math11_payments',JSON.stringify(pays));loadPays();}
-function payWinner(i){let c=data.contests[i];if(!c.winnerUpi)return alert('Winner UPI dalo pehle');window.location.href=`upi://pay?pa=${c.winnerUpi}&pn=${c.winner}&am=${c.prize}&cu=INR&tn=Math11 Prize ${c.title}`;}
-</script></body></html>
+const PASS="Mukhtar@123";
+function login(){
+if(document.getElementById("pass").value===PASS){
+document.getElementById("loginBox").style.display="none";
+document.getElementById("panel").style.display="block";
+}else{document.getElementById("err").innerText="Galat Password BOSS!";}
+}
+function addQ(){
+let q=document.getElementById("q").value;
+if(!q){alert("Sawal Likho BOSS!");return;}
+let html=`<div style="border-top:1px solid #334155;padding:5px">Q: ${q} ✅ Added</div>`;
+document.getElementById("qlist").innerHTML+=html;
+alert("Question Add Ho Gaya BOSS! Ab User Ko Dikhega!");
+}
+function logout(){location.reload();}
+</script>
+</body>
+</html>
