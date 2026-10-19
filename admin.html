@@ -1,35 +1,146 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Math11 Admin</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math 11 - Full Control Admin</title>
+<style>
+body{font-family:system-ui;background:#0f172a;color:white;padding:15px;max-width:500px;margin:auto}
+h1{text-align:center;color:#38bdf8}
+.card{background:#1e293b;padding:15px;border-radius:12px;margin-bottom:15px;border:1px solid #334155}
+label{display:block;margin-top:10px;font-weight:bold;color:#94a3b8;font-size:14px}
+input,textarea,select{width:100%;padding:10px;margin-top:5px;border-radius:8px;border:none;background:#0f172a;color:white;border:1px solid #334155;box-sizing:border-box}
+button{width:100%;padding:12px;margin-top:15px;background:#38bdf8;color:#000;font-weight:bold;border:none;border-radius:10px;font-size:16px;cursor:pointer}
+button:active{transform:scale(0.98)}
+.success{background:#16a34a;padding:10px;border-radius:8px;text-align:center;display:none;margin-top:10px}
+.small{font-size:12px;color:#64748b;text-align:center;margin-top:10px}
+.row{display:flex;gap:10px}
+.row>div{flex:1}
+</style>
 </head>
-<body style="background:#111;color:white;font-family:sans-serif;padding:20px">
-<h2>Math11 - Admin Control 🔐</h2>
-<p>Password: math11@123</p>
-<input id="pass" type="password" placeholder="Password likho" style="width:100%;padding:12px"><br><br>
-<button onclick="login()" style="width:100%;padding:12px;background:yellow;font-weight:bold">LOGIN</button>
+<body>
+<h1>👑 MATH 11<br>FULL CONTROL PANEL</h1>
 
-<div id="panel" style="display:none;margin-top:20px">
-<h3>Contest Control</h3>
-Prize: <input id="prize" value="10000" style="width:100%;padding:10px;margin:5px 0"><br>
-Entry: <input id="entry" value="50" style="width:100%;padding:10px;margin:5px 0"><br>
-Joined: <input id="joined" value="740" style="width:100%;padding:10px;margin:5px 0"><br><br>
-<button onclick="save()" style="width:100%;padding:14px;background:#FFD600;font-weight:bold">SAVE & UPDATE APP</button>
-<p id="msg"></p>
+<div id="loginCard" class="card">
+<label>Admin Password</label>
+<input type="password" id="pass" placeholder="Password dalo">
+<button onclick="login()">LOGIN</button>
+</div>
+
+<div id="main" style="display:none">
+
+<div class="card">
+<h3>❓ Question Control</h3>
+<label>Sawal (Question)</label>
+<textarea id="q" rows="3" placeholder="Ex: 2x + 5 = 15, x ka value kya hai?"></textarea>
+<div class="row">
+<div><label>Option A</label><input id="opA" placeholder="Option A"></div>
+<div><label>Option B</label><input id="opB" placeholder="Option B"></div>
+</div>
+<div class="row">
+<div><label>Option C</label><input id="opC" placeholder="Option C"></div>
+<div><label>Option D</label><input id="opD" placeholder="Option D"></div>
+</div>
+<label>✅ Correct Answer (A/B/C/D)</label>
+<select id="ans"><option>A</option><option>B</option><option>C</option><option>D</option></select>
+</div>
+
+<div class="card">
+<h3>⏰ Timing Control</h3>
+<label>Contest End Date & Time</label>
+<input type="datetime-local" id="endTime">
+<label>Timer Text</label>
+<input id="timerText" placeholder="Ex: Contest ends in 2 Days">
+</div>
+
+<div class="card">
+<h3>🏆 Prize & Entry Control</h3>
+<div class="row">
+<div><label>Prize XP</label><input type="number" id="prize" value="80"></div>
+<div><label>Entry XP</label><input type="number" id="entry" value="50"></div>
+</div>
+<label>Joined Students</label><input type="number" id="joined" value="2">
+<label>Winner Name</label><input id="winner" placeholder="Ex: No Winner Yet">
+<label>Notice</label><textarea id="notice" rows="2" placeholder="Ex: Kal naya contest ayega!"></textarea>
+</div>
+
+<button onclick="saveAll()">💾 SAVE & UPDATE APP</button>
+<div id="ok" class="success">Ho gaya Save! Ab sab kuch update ho gaya ✅</div>
+
+<div class="card">
+<h3>📄 App Data Preview</h3>
+<pre id="preview" style="background:#000;padding:10px;border-radius:8px;font-size:12px;white-space:pre-wrap;word-break:break-all"></pre>
+</div>
 </div>
 
 <script>
+const ADMIN_PASS = "math11@123";
 function login(){
- if(document.getElementById('pass').value=='math11@123'){
-  document.getElementById('panel').style.display='block';
- } else { alert('Galat Password'); }
+ if(document.getElementById('pass').value === ADMIN_PASS){
+   document.getElementById('loginCard').style.display='none';
+   document.getElementById('main').style.display='block';
+   loadAll();
+ } else { alert('Galat Password!'); }
 }
-function save(){
- const data = { prize: prize.value, entry: entry.value, joined: joined.value };
- localStorage.setItem('math11_admin', JSON.stringify(data));
- document.getElementById('msg').innerHTML = 'Ho gaya Save! <br>Ab Prize = '+data.prize+' XP';
+function loadAll(){
+ const data = JSON.parse(localStorage.getItem('math11_full_contest') || '{}');
+ document.getElementById('q').value = data.q || '';
+ document.getElementById('opA').value = data.opA || '';
+ document.getElementById('opB').value = data.opB || '';
+ document.getElementById('opC').value = data.opC || '';
+ document.getElementById('opD').value = data.opD || '';
+ document.getElementById('ans').value = data.ans || 'A';
+ document.getElementById('endTime').value = data.endTime || '';
+ document.getElementById('timerText').value = data.timerText || '';
+ document.getElementById('prize').value = data.prize || 80;
+ document.getElementById('entry').value = data.entry || 50;
+ document.getElementById('joined').value = data.joined || 2;
+ document.getElementById('winner').value = data.winner || '';
+ document.getElementById('notice').value = data.notice || '';
+ updatePreview();
 }
+function saveAll(){
+ const data = {
+   q: document.getElementById('q').value,
+   opA: document.getElementById('opA').value,
+   opB: document.getElementById('opB').value,
+   opC: document.getElementById('opC').value,
+   opD: document.getElementById('opD').value,
+   ans: document.getElementById('ans').value,
+   endTime: document.getElementById('endTime').value,
+   timerText: document.getElementById('timerText').value,
+   prize: document.getElementById('prize').value,
+   entry: document.getElementById('entry').value,
+   joined: document.getElementById('joined').value,
+   winner: document.getElementById('winner').value,
+   notice: document.getElementById('notice').value,
+   lastUpdated: new Date().toISOString()
+ };
+ localStorage.setItem('math11_full_contest', JSON.stringify(data));
+ localStorage.setItem('math11_contest', JSON.stringify(data));
+ updatePreview();
+ document.getElementById('ok').style.display='block';
+ setTimeout(()=>{document.getElementById('ok').style.display='none'},3000);
+}
+function updatePreview(){
+ const data = {
+   q: document.getElementById('q').value,
+   opA: document.getElementById('opA').value,
+   opB: document.getElementById('opB').value,
+   opC: document.getElementById('opC').value,
+   opD: document.getElementById('opD').value,
+   ans: document.getElementById('ans').value,
+   endTime: document.getElementById('endTime').value,
+   timerText: document.getElementById('timerText').value,
+   prize: document.getElementById('prize').value,
+   entry: document.getElementById('entry').value,
+   joined: document.getElementById('joined').value,
+   winner: document.getElementById('winner').value,
+   notice: document.getElementById('notice').value
+ };
+ document.getElementById('preview').innerText = JSON.stringify(data, null, 2);
+}
+document.addEventListener('input', updatePreview);
 </script>
 </body>
 </html>
