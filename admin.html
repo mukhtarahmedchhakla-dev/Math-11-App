@@ -3,144 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Math 11 - Full Control Admin</title>
+<title>BOSS PANEL - Math 11</title>
 <style>
-body{font-family:system-ui;background:#0f172a;color:white;padding:15px;max-width:500px;margin:auto}
-h1{text-align:center;color:#38bdf8}
-.card{background:#1e293b;padding:15px;border-radius:12px;margin-bottom:15px;border:1px solid #334155}
-label{display:block;margin-top:10px;font-weight:bold;color:#94a3b8;font-size:14px}
-input,textarea,select{width:100%;padding:10px;margin-top:5px;border-radius:8px;border:none;background:#0f172a;color:white;border:1px solid #334155;box-sizing:border-box}
-button{width:100%;padding:12px;margin-top:15px;background:#38bdf8;color:#000;font-weight:bold;border:none;border-radius:10px;font-size:16px;cursor:pointer}
-button:active{transform:scale(0.98)}
-.success{background:#16a34a;padding:10px;border-radius:8px;text-align:center;display:none;margin-top:10px}
-.small{font-size:12px;color:#64748b;text-align:center;margin-top:10px}
-.row{display:flex;gap:10px}
-.row>div{flex:1}
+*{box-sizing:border-box}
+body{font-family:system-ui;background:#020617;color:white;padding:10px;max-width:600px;margin:auto}
+h1{text-align:center;color:#38bdf8;font-size:22px}
+.card{background:#1e293b;padding:12px;border-radius:12px;margin-bottom:12px;border:1px solid #334155}
+label{font-size:12px;color:#94a3b8;font-weight:bold;margin-top:8px;display:block}
+input,textarea,select{width:100%;padding:9px;margin-top:4px;border-radius:8px;background:#0f172a;color:white;border:1px solid #334155}
+button{padding:10px 12px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin-top:8px}
+.btn-blue{background:#38bdf8;color:#000;width:100%}
+.btn-green{background:#22c55e;color:#000;width:100%}
+.btn-red{background:#ef4444;color:white}
+.btn-small{font-size:12px;padding:6px 10px}
+.row{display:flex;gap:8px}
+.flex1{flex:1}
+.contest-item{background:#0f172a;padding:10px;border-radius:10px;margin-bottom:8px;border-left:4px solid #38bdf8}
+.q-item{background:#020617;padding:8px;border-radius:8px;margin:6px 0;border:1px dashed #334155}
+.hidden{display:none}
+.badge{font-size:10px;background:#38bdf8;color:#000;padding:2px 6px;border-radius:20px}
 </style>
 </head>
 <body>
-<h1>👑 MATH 11<br>FULL CONTROL PANEL</h1>
+<h1>👑 BOSS PANEL<br><span style="font-size:12px;color:#64748b">Math 11 - FULL CONTROL</span></h1>
 
-<div id="loginCard" class="card">
-<label>Admin Password</label>
-<input type="password" id="pass" placeholder="Password dalo">
-<button onclick="login()">LOGIN</button>
+<div id="login" class="card">
+<label>Password</label>
+<input type="password" id="pass" placeholder="math11@123">
+<button class="btn-blue" onclick="login()">LOGIN AS BOSS</button>
 </div>
 
-<div id="main" style="display:none">
-
+<div id="main" class="hidden">
 <div class="card">
-<h3>❓ Question Control</h3>
-<label>Sawal (Question)</label>
-<textarea id="q" rows="3" placeholder="Ex: 2x + 5 = 15, x ka value kya hai?"></textarea>
 <div class="row">
-<div><label>Option A</label><input id="opA" placeholder="Option A"></div>
-<div><label>Option B</label><input id="opB" placeholder="Option B"></div>
+<button class="btn-blue flex1" onclick="addContest()">+ NEW CONTEST</button>
+<button class="btn-green flex1" onclick="saveBoss()">💾 SAVE ALL</button>
 </div>
-<div class="row">
-<div><label>Option C</label><input id="opC" placeholder="Option C"></div>
-<div><label>Option D</label><input id="opD" placeholder="Option D"></div>
+<p id="status" style="text-align:center;color:#22c55e;display:none">✅ SAVED - App Updated!</p>
 </div>
-<label>✅ Correct Answer (A/B/C/D)</label>
-<select id="ans"><option>A</option><option>B</option><option>C</option><option>D</option></select>
+
+<div id="contestList"></div>
+
+<div class="card">
+<h3>⚙️ APP SETTINGS (Global)</h3>
+<label>App Notice (Sabko dikhega)</label><textarea id="globalNotice" rows="2"></textarea>
+<label>Maintenance ON/OFF</label>
+<select id="maintenance"><option value="off">OFF - App Chalega</option><option value="on">ON - App Band</option></select>
 </div>
 
 <div class="card">
-<h3>⏰ Timing Control</h3>
-<label>Contest End Date & Time</label>
-<input type="datetime-local" id="endTime">
-<label>Timer Text</label>
-<input id="timerText" placeholder="Ex: Contest ends in 2 Days">
-</div>
-
-<div class="card">
-<h3>🏆 Prize & Entry Control</h3>
-<div class="row">
-<div><label>Prize XP</label><input type="number" id="prize" value="80"></div>
-<div><label>Entry XP</label><input type="number" id="entry" value="50"></div>
-</div>
-<label>Joined Students</label><input type="number" id="joined" value="2">
-<label>Winner Name</label><input id="winner" placeholder="Ex: No Winner Yet">
-<label>Notice</label><textarea id="notice" rows="2" placeholder="Ex: Kal naya contest ayega!"></textarea>
-</div>
-
-<button onclick="saveAll()">💾 SAVE & UPDATE APP</button>
-<div id="ok" class="success">Ho gaya Save! Ab sab kuch update ho gaya ✅</div>
-
-<div class="card">
-<h3>📄 App Data Preview</h3>
-<pre id="preview" style="background:#000;padding:10px;border-radius:8px;font-size:12px;white-space:pre-wrap;word-break:break-all"></pre>
+<h4>📄 Final JSON (App ye padhega)</h4>
+<pre id="jsonPreview" style="background:#000;padding:8px;border-radius:8px;font-size:10px;white-space:pre-wrap;word-break:break-all;max-height:200px;overflow:auto"></pre>
 </div>
 </div>
 
 <script>
-const ADMIN_PASS = "math11@123";
+const PASS="math11@123";
+let data = JSON.parse(localStorage.getItem('math11_boss_final')||'{"contests":[],"globalNotice":"","maintenance":"off"}');
+
 function login(){
- if(document.getElementById('pass').value === ADMIN_PASS){
-   document.getElementById('loginCard').style.display='none';
-   document.getElementById('main').style.display='block';
-   loadAll();
- } else { alert('Galat Password!'); }
+ if(document.getElementById('pass').value!==PASS) return alert('Wrong Password');
+ document.getElementById('login').classList.add('hidden');
+ document.getElementById('main').classList.remove('hidden');
+ render();
 }
-function loadAll(){
- const data = JSON.parse(localStorage.getItem('math11_full_contest') || '{}');
- document.getElementById('q').value = data.q || '';
- document.getElementById('opA').value = data.opA || '';
- document.getElementById('opB').value = data.opB || '';
- document.getElementById('opC').value = data.opC || '';
- document.getElementById('opD').value = data.opD || '';
- document.getElementById('ans').value = data.ans || 'A';
- document.getElementById('endTime').value = data.endTime || '';
- document.getElementById('timerText').value = data.timerText || '';
- document.getElementById('prize').value = data.prize || 80;
- document.getElementById('entry').value = data.entry || 50;
- document.getElementById('joined').value = data.joined || 2;
- document.getElementById('winner').value = data.winner || '';
- document.getElementById('notice').value = data.notice || '';
- updatePreview();
+
+function addContest(){
+ const id = Date.now();
+ data.contests.push({id:id,title:"Contest "+(data.contests.length+1),prize:80,entry:50,joined:2,endTime:"",status:"active",winner:"",questions:[{q:"",A:"",B:"",C:"",D:"",ans:"A"}]});
+ render();
 }
-function saveAll(){
- const data = {
-   q: document.getElementById('q').value,
-   opA: document.getElementById('opA').value,
-   opB: document.getElementById('opB').value,
-   opC: document.getElementById('opC').value,
-   opD: document.getElementById('opD').value,
-   ans: document.getElementById('ans').value,
-   endTime: document.getElementById('endTime').value,
-   timerText: document.getElementById('timerText').value,
-   prize: document.getElementById('prize').value,
-   entry: document.getElementById('entry').value,
-   joined: document.getElementById('joined').value,
-   winner: document.getElementById('winner').value,
-   notice: document.getElementById('notice').value,
-   lastUpdated: new Date().toISOString()
- };
- localStorage.setItem('math11_full_contest', JSON.stringify(data));
- localStorage.setItem('math11_contest', JSON.stringify(data));
- updatePreview();
- document.getElementById('ok').style.display='block';
- setTimeout(()=>{document.getElementById('ok').style.display='none'},3000);
+
+function addQuestion(cIndex){
+ data.contests[cIndex].questions.push({q:"",A:"",B:"",C:"",D:"",ans:"A"});
+ render();
 }
-function updatePreview(){
- const data = {
-   q: document.getElementById('q').value,
-   opA: document.getElementById('opA').value,
-   opB: document.getElementById('opB').value,
-   opC: document.getElementById('opC').value,
-   opD: document.getElementById('opD').value,
-   ans: document.getElementById('ans').value,
-   endTime: document.getElementById('endTime').value,
-   timerText: document.getElementById('timerText').value,
-   prize: document.getElementById('prize').value,
-   entry: document.getElementById('entry').value,
-   joined: document.getElementById('joined').value,
-   winner: document.getElementById('winner').value,
-   notice: document.getElementById('notice').value
- };
- document.getElementById('preview').innerText = JSON.stringify(data, null, 2);
+
+function deleteContest(cIndex){ if(confirm('Delete this contest?')){ data.contests.splice(cIndex,1); render(); } }
+function deleteQuestion(cIndex,qIndex){ data.contests[cIndex].questions.splice(qIndex,1); render(); }
+
+function render(){
+ const list = document.getElementById('contestList');
+ list.innerHTML="";
+ data.contests.forEach((c,i)=>{
+  let qsHtml = c.questions.map((q,qi)=>`
+   <div class="q-item">
+    <div class="row"><span class="badge">Q${qi+1}</span><button class="btn-red btn-small" style="margin-left:auto" onclick="deleteQuestion(${i},${qi})">X</button></div>
+    <label>Sawal</label><textarea oninput="data.contests[${i}].questions[${qi}].q=this.value;updateJson()">${q.q}</textarea>
+    <div class="row"><div class="flex1"><label>A</label><input value="${q.A}" oninput="data.contests[${i}].questions[${qi}].A=this.value;updateJson()"></div><div class="flex1"><label>B</label><input value="${q.B}" oninput="data.contests[${i}].questions[${qi}].B=this.value;updateJson()"></div></div>
+    <div class="row"><div class="flex1"><label>C</label><input value="${q.C}" oninput="data.contests[${i}].questions[${qi}].C=this.value;updateJson()"></div><div class="flex1"><label>D</label><input value="${q.D}" oninput="data.contests[${i}].questions[${qi}].D=this.value;updateJson()"></div></div>
+    <label>Correct</label><select onchange="data.contests[${i}].questions[${qi}].ans=this.value;updateJson()"><option ${q.ans=='A'?'selected':''}>A</option><option ${q.ans=='B'?'selected':''}>B</option><option ${q.ans=='C'?'selected':''}>C</option><option ${q.ans=='D'?'selected':''}>D</option></select>
+   </div>
+  `).join('');
+  list.innerHTML+=`
+  <div class="contest-item">
+   <div class="row"><input value="${c.title}" style="font-weight:bold" oninput="data.contests[${i}].title=this.value;updateJson()"><button class="btn-red btn-small" onclick="deleteContest(${i})">DELETE</button></div>
+   <div class="row"><div class="flex1"><label>Prize</label><input type="number" value="${c.prize}" oninput="data.contests[${i}].prize=this.value;updateJson()"></div><div class="flex1"><label>Entry</label><input type="number" value="${c.entry}" oninput="data.contests[${i}].entry=this.value;updateJson()"></div><div class="flex1"><label>Joined</label><input type="number" value="${c.joined}" oninput="data.contests[${i}].joined=this.value;updateJson()"></div></div>
+   <label>End Time</label><input type="datetime-local" value="${c.endTime}" oninput="data.contests[${i}].endTime=this.value;updateJson()">
+   <div class="row"><div class="flex1"><label>Status</label><select onchange="data.contests[${i}].status=this.value;updateJson()"><option value="active" ${c.status=='active'?'selected':''}>ACTIVE</option><option value="off" ${c.status=='off'?'selected':''}>OFF</option></select></div><div class="flex1"><label>Winner</label><input value="${c.winner}" oninput="data.contests[${i}].winner=this.value;updateJson()"></div></div>
+   <h4 style="margin:10px 0 5px">Questions (${c.questions.length})</h4>
+   ${qsHtml}
+   <button class="btn-small" style="background:#334155;color:white;width:100%" onclick="addQuestion(${i})">+ Add Sawal in this Contest</button>
+  </div>`;
+ });
+ document.getElementById('globalNotice').value=data.globalNotice||"";
+ document.getElementById('maintenance').value=data.maintenance||"off";
+ updateJson();
 }
-document.addEventListener('input', updatePreview);
+
+function updateJson(){
+ data.globalNotice=document.getElementById('globalNotice').value;
+ data.maintenance=document.getElementById('maintenance').value;
+ document.getElementById('jsonPreview').innerText=JSON.stringify(data,null,2);
+}
+
+function saveBoss(){
+ localStorage.setItem('math11_boss_final',JSON.stringify(data));
+ // compatibility with old app
+ localStorage.setItem('math11_full_contest',JSON.stringify(data.contests[0]||{}));
+ localStorage.setItem('math11_contest',JSON.stringify(data.contests[0]||{}));
+ updateJson();
+ document.getElementById('status').style.display='block';
+ setTimeout(()=>document.getElementById('status').style.display='none',2500);
+}
 </script>
 </body>
 </html>
