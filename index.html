@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>MATH-11 FANTASY V9 PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',system-ui}
+body{background:#0f1115;color:#fff;padding-bottom:80px}
+.top-bar{padding:12px 15px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;font-size:20px} .logo span{color:#facc15}
+.live-dot{background:#1a1d27;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:800}
+.wallet-card{background:#1e222f;margin:10px;border-radius:16px;padding:14px;border:1px solid #2a2e3f}
+.wallet-top{display:flex;justify-content:space-between}
+.wallet-top h4{font-size:12px;color:#9aa0b5} .wallet-top b{font-size:22px;color:#facc15}
+.btn-row{display:flex;gap:8px;margin-top:10px}
+.btn-add{flex:1;background:#facc15;color:#000;padding:10px;border-radius:10px;font-weight:900;border:none}
+.btn-with{flex:1;background:#2a2e3f;color:#fff;padding:10px;border-radius:10px;font-weight:700;border:1px solid #3a3f55}
+.num-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px}
+.num{background:#1e222f;border:1px solid #2a2e3f;padding:16px;border-radius:12px;text-align:center;font-weight:900;font-size:18px;cursor:pointer}
+.num.active{background:#facc15;color:#000;border-color:#facc15}
+.bet-bar{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(90deg,#f59e0b,#facc15);padding:12px;text-align:center;color:#000;font-weight:900}
+</style>
+</head>
+<body>
+
+<!-- FANTASY HOME BUTTON - FIXED -->
+<div onclick="location.href='fantasy.html'" style="background:linear-gradient(135deg,#22c55e,#16a34a);margin:12px;padding:16px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:0 8px 20px rgba(34,197,94,0.3);">
+<div><div style="font-weight:900;font-size:18px;color:#000">🏆 MATH-11 FANTASY</div><div style="font-size:13px;color:#000;font-weight:700">Win ₹5000 - LIVE!</div></div>
+<div style="background:#000;color:#22c55e;padding:8px 14px;border-radius:10px;font-weight:900;font-size:14px">PLAY</div>
+</div>
+
+<div class="top-bar"><div class="logo">👑 V9 PRO</div><div class="live-dot">🟢 LIVE &nbsp; Rs.30</div></div>
+
+<div style="display:flex;gap:8px;padding:0 10px;overflow-x:auto">
+<div style="background:#facc15;color:#000;padding:8px 14px;border-radius:20px;font-weight:800;font-size:13px;white-space:nowrap">🎮 Quick Game</div>
+<div style="background:#1e222f;padding:8px 14px;border-radius:20px;font-weight:700;font-size:13px;white-space:nowrap">🏆 Leaderboard</div>
+<div style="background:#1e222f;padding:8px 14px;border-radius:20px;font-weight:700;font-size:13px;white-space:nowrap">💰 My Wallet</div>
+</div>
+
+<div class="wallet-card">
+<div class="wallet-top"><div><h4>TOTAL WALLET</h4><b>Rs.30</b><div style="font-size:11px;color:#9aa0b5">Bonus: Rs.20 • Winning: Rs.0</div></div>
+<div><button class="btn-add">+ ADD CASH</button></div></div>
+<div style="text-align:center;color:#22c55e;font-weight:800;margin-top:10px;font-size:13px">⏱ Next Result in: <span id="timer">15s</span> • 10 Lagao 18 Jeeto</div>
+</div>
+
+<div style="padding:0 12px"><h4 style="font-size:14px;margin:10px 0">Select Number (0-9) <span style="float:right;color:#9aa0b5;font-weight:600">CLEAR</span></h4></div>
+<div class="num-grid">
+<div class="num" onclick="this.classList.toggle('active')">0</div>
+<div class="num" onclick="this.classList.toggle('active')">1</div>
+<div class="num" onclick="this.classList.toggle('active')">2</div>
+<div class="num" onclick="this.classList.toggle('active')">3</div>
+<div class="num" onclick="this.classList.toggle('active')">4</div>
+<div class="num" onclick="this.classList.toggle('active')">5</div>
+<div class="num" onclick="this.classList.toggle('active')">6</div>
+<div class="num" onclick="this.classList.toggle('active')">7</div>
+<div class="num" onclick="this.classList.toggle('active')">8</div>
+<div class="num" onclick="this.classList.toggle('active')">9</div>
+</div>
+
+<div class="wallet-card"><h4>📜 Last Results</h4><div style="color:#9aa0b5;font-size:13px;margin-top:8px">Abhi tak koi result nahi BOSS!</div></div>
+
+<div class="bet-bar">⚡ Rs.10 LAGAO - Rs.18 JEETO ⚡</div>
+
+<script>
+let t=15; setInterval(()=>{t--; if(t<=0)t=15; document.getElementById('timer').innerText=t+'s';},1000);
+</script>
+</body>
+</html>
