@@ -94,3 +94,28 @@ document.getElementById('bossUpi').value = localStorage.getItem('BOSS_UPI') || "
 </script>
 </body>
 </html>
+<body>
+
+<!-- 🔒 BOSS PASSWORD LOCK - V8 SECURE -->
+<div id="lockScreen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px">
+  <h2 style="color:gold">🔒 BOSS TIJORI LOCKED</h2>
+  <input id="bossPass" type="password" placeholder="Password likho BOSS" style="max-width:300px">
+  <button class="gold" onclick="unlockBoss()" style="max-width:300px;margin-top:10px">UNLOCK TIJORI 👑</button>
+  <p id="passMsg" style="color:red;text-align:center"></p>
+</div>
+
+<script>
+function unlockBoss(){
+  const p = document.getElementById('bossPass').value;
+  if(p === "Mukhtar@123"){
+    document.getElementById('lockScreen').style.display = "none";
+    localStorage.setItem('BOSS_UNLOCKED','yes');
+  } else {
+    document.getElementById('passMsg').innerText = "❌ Galat Password BOSS! Sahi likho - Mukhtar@123";
+  }
+}
+// Auto unlock agar pehle se unlock hai
+if(localStorage.getItem('BOSS_UNLOCKED') === 'yes'){
+  document.getElementById('lockScreen').style.display = "none";
+}
+</script>
