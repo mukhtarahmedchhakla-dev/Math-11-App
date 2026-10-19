@@ -1,93 +1,66 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SUPER ADMIN - MATH 11 BOSS</title>
-<style>body{background:#0f172a;color:white;font-family:sans-serif;padding:15px} .card{background:#1e293b;padding:15px;border-radius:12px;margin:12px 0;border:1px solid #334155} button{padding:10px 15px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:3px} .green{background:#22c55e} .red{background:#ef4444;color:white} .blue{background:#3b82f6;color:white} input{padding:10px;border-radius:8px;border:none;width:90%;margin:5px 0} h2{color:#facc15}</style>
+<title>SUPER ADMIN V7 - FINAL BOSS</title>
+<style>body{background:#0f172a;color:white;font-family:sans-serif;padding:12px} .card{background:#1e293b;padding:14px;border-radius:12px;margin:12px 0;border:1px solid #334155} button{padding:9px 12px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;margin:3px} .green{background:#22c55e;color:white} .red{background:#ef4444;color:white} .blue{background:#3b82f6;color:white} .gold{background:#facc15;color:black} .orange{background:#f97316;color:white} input{padding:10px;border-radius:8px;border:none;width:92%;margin:5px 0} h2{color:#facc15;font-size:17px;margin:5px 0} .item{border:1px solid #333;padding:8px;margin:6px 0;border-radius:8px;background:#0f172a} small{color:#94a3b8}</style>
 </head><body>
-<h1>👑 MATH 11 SUPER ADMIN</h1>
-
-<div class="card">
-<h2>💰 BOSS UPI SETTING</h2>
-<input id="bossUpi" placeholder="Tumhara UPI ID jaise 98765@okaxis">
-<input id="bossName" placeholder="Tumhara Naam">
-<button class="blue" onclick="saveBossUpi()">SAVE UPI</button>
-<p id="savedUpiShow"></p>
-</div>
-
-<div class="card">
-<h2>💳 PENDING PAYMENTS (User ne pay kiya)</h2>
-<div id="paymentList">Loading...</div>
-<button class="blue" onclick="loadPayments()">Refresh Payments</button>
-</div>
-
-<div class="card">
-<h2>🏆 CONTEST WINNERS & UPI PAY</h2>
-<div id="winnerList">Loading...</div>
-<button class="blue" onclick="loadWinners()">Refresh Winners</button>
-</div>
-
-<div class="card">
-<h2>👥 ALL USERS UPI LIST</h2>
-<div id="userList"></div>
-</div>
 
 <script>
-function saveBossUpi(){
- localStorage.setItem('math11_upi', JSON.stringify({id:document.getElementById('bossUpi').value, name:document.getElementById('bossName').value}));
- alert('UPI Saved BOSS!');
- showSavedUpi();
+// 🔐 BOSS PASSWORD SET KARO YAHA - 2 JAGAH SAME LIKHNA
+const BOSS_PASSWORD = "BOSS123";
+let savedPass = localStorage.getItem('math11_boss_pass');
+if(!savedPass){ let p=prompt("👑 Pehli Baar BOSS Password Banao:"); if(p){ localStorage.setItem('math11_boss_pass', p); alert("Password Save Ho Gaya: "+p); } }
+let entered = prompt("👑 SUPER ADMIN PASSWORD DALO:");
+if(entered !== (localStorage.getItem('math11_boss_pass')||BOSS_PASSWORD)){
+  document.write("<h1 style='text-align:center;margin-top:100px;color:red'>❌ WRONG PASSWORD<br><br><button onclick='localStorage.removeItem(\"math11_boss_pass\");location.reload()' style='padding:10px'>Reset Password</button></h1>");
+  throw new Error("Blocked");
 }
-function showSavedUpi(){
- let d=JSON.parse(localStorage.getItem('math11_upi')||'{"id":"Not Set","name":""}');
- document.getElementById('savedUpiShow').innerHTML = 'Saved: <b>'+d.id+' ('+d.name+')</b>';
- document.getElementById('bossUpi').value = d.id;
- document.getElementById('bossName').value = d.name;
-}
-function loadPayments(){
- let pays = JSON.parse(localStorage.getItem('math11_payments')||'[]');
- let html = pays.length ? '' : 'Koi payment pending nahi';
- pays.forEach((p,i)=>{
-   html+=`<div style="border:1px solid #444;padding:8px;margin:5px;border-radius:8px">👤 ${p.name} | ${p.phone} | ${p.contest} | Rs.${p.amount}<br>
-   <button class="green" onclick="approvePay(${i})">APPROVE & ALLOW</button> <button class="red" onclick="rejectPay(${i})">REJECT</button></div>`;
- });
- document.getElementById('paymentList').innerHTML=html;
-}
-function approvePay(i){
- let pays=JSON.parse(localStorage.getItem('math11_payments')||'[]');
- alert('Approved: '+pays[i].name+' ab contest khel sakta hai');
- pays.splice(i,1);
- localStorage.setItem('math11_payments', JSON.stringify(pays));
- loadPayments();
-}
-function rejectPay(i){
- let pays=JSON.parse(localStorage.getItem('math11_payments')||'[]');
- pays.splice(i,1);
- localStorage.setItem('math11_payments', JSON.stringify(pays));
- loadPayments();
-}
-function loadWinners(){
- let bossData=JSON.parse(localStorage.getItem('math11_boss_final')||'{"contests":[]}');
- let html = '';
- bossData.contests.forEach(c=>{
-   if(c.winner){
-     html+=`<div style="border:1px solid gold;padding:8px;margin:5px;border-radius:8px">🏆 ${c.title} - Winner: ${c.winner}<br>UPI: <b>${c.winnerUpi||'UPI Not Found'}</b><br>
-     <button class="green" onclick="payWinner('${c.winnerUpi}', '${c.prize||10}')">Pay Rs.${c.prize||10} to ${c.winnerUpi}</button></div>`;
-   }
- });
- if(!html) html='Abhi koi winner nahi';
- document.getElementById('winnerList').innerHTML=html;
- 
- // Users list
- let upi = localStorage.getItem('math11_user_upi')||'Not Saved';
- let name = localStorage.getItem('math11_user_name')||'You';
- document.getElementById('userList').innerHTML = `👤 ${name} - ${upi} (Current Device)`;
-}
-function payWinner(upi, amount){
- if(!upi || !upi.includes('@')){ alert('Winner ka UPI galat hai: '+upi); return; }
- let bossUpi = JSON.parse(localStorage.getItem('math11_upi')||'{"id":""}').id;
- if(!bossUpi){ alert('Pehle apna BOSS UPI save karo!'); return; }
- window.location.href = `upi://pay?pa=${upi}&pn=Winner&am=${amount}&cu=INR&tn=Math11 Prize`;
-}
-showSavedUpi(); loadPayments(); loadWinners();
-setInterval(()=>{loadPayments(); loadWinners();}, 5000);
 </script>
-</body></html>
+
+<h1>👑 MATH 11 - SUPER ADMIN V7 (FINAL)</h1>
+<p style="color:#22c55e">✅ Password Protected - Safe Hai BOSS</p>
+
+<div class="card"><h2>💰 1. TUMHARI BOSS UPI (Paisa Yaha Ayega)</h2>
+<input id="bossUpi" placeholder="Tumhara UPI ID - jaise 98765@okaxis"><input id="bossName" placeholder="Tumhara Naam"><button class="blue" onclick="saveBossUpi()">SAVE UPI</button><p id="savedUpiShow" style="color:gold"></p></div>
+
+<div class="card"><h2>💳 2. PENDING JOIN PAYMENTS (User ne Join ke liye pay kiya)</h2><div id="paymentList"></div><button class="orange" onclick="loadAll()">🔄 Refresh</button></div>
+
+<div class="card"><h2>💸 3. WITHDRAW REQUESTS (User ko Paisa Dena Hai)</h2><div id="withdrawList"></div></div>
+
+<div class="card"><h2>🏆 4. WINNERS KO PRIZE BHEJNA</h2><div id="winnerList"></div></div>
+
+<div class="card"><h2>👥 5. REFER LIST (Kaun kisko laya)</h2><div id="referList"></div></div>
+
+<div class="card"><h2>👤 6. CURRENT USER</h2><div id="userList"></div><button class="red" onclick="clearAllData()">⚠️ SAB DATA DELETE</button></div>
+
+<script>
+function saveBossUpi(){ let id=document.getElementById('bossUpi').value; let name=document.getElementById('bossName').value; if(!id.includes('@')){alert('Sahi UPI dalo @ wala');return;} localStorage.setItem('math11_upi', JSON.stringify({id:id,name:name})); showSavedUpi(); alert('✅ BOSS UPI Saved!'); }
+function showSavedUpi(){ let d=JSON.parse(localStorage.getItem('math11_upi')||'{"id":"Not Set","name":""}'); document.getElementById('savedUpiShow').innerHTML='✅ Saved: <b>'+d.id+' ('+d.name+')</b>'; document.getElementById('bossUpi').value=d.id!='Not Set'?d.id:''; document.getElementById('bossName').value=d.name; }
+
+function loadAll(){
+ let pays=JSON.parse(localStorage.getItem('math11_payments')||'[]');
+ let htmlP=''; pays.forEach((p,i)=>{ htmlP+=`<div class="item">👤 <b>${p.name||'User'}</b> | Contest: ${p.contest||'N/A'} | Rs.${p.amount||10}<br><small>${p.time||''}</small><br><button class="green" onclick="approvePay(${i})">✅ APPROVE</button> <button class="red" onclick="rejectPay(${i})">❌ REJECT</button></div>`; });
+ document.getElementById('paymentList').innerHTML=htmlP||'<p style="color:gray">Koi payment pending nahi</p>';
+
+ let wReq=JSON.parse(localStorage.getItem('math11_withdraw_requests')||'[]');
+ let htmlW=''; wReq.forEach((w,i)=>{ if(w.status=='PENDING'){ htmlW+=`<div class="item" style="border-color:orange">💸 <b>${w.name}</b> - Rs.${w.amount} mang raha hai<br>UPI: <b style="color:gold">${w.upi}</b><br><small>${w.time}</small><br><button class="green" onclick="approveW(${i})">✅ PAID KAR DIYA</button> <button class="gold" onclick="payUpi('${w.upi}','${w.amount}')">💰 UPI Se Bhejo</button> <button class="red" onclick="rejectW(${i})">❌ REJECT</button></div>`; } });
+ document.getElementById('withdrawList').innerHTML=htmlW||'<p style="color:gray">Koi withdraw request nahi</p>';
+
+ let bossData=JSON.parse(localStorage.getItem('math11_boss_final')||'{"contests":[]}');
+ let htmlWin=''; bossData.contests.forEach((c,i)=>{ if(c.winner){ htmlWin+=`<div class="item" style="border-color:gold">🏆 ${c.title||'Contest'} - Winner: <b>${c.winner}</b><br>UPI: <b>${c.winnerUpi||'N/A'}</b> | Prize: Rs.${c.prize||10}<br><button class="gold" onclick="payUpi('${c.winnerUpi}','${c.prize||10}')">💰 Prize Bhejo</button></div>`; } });
+ document.getElementById('winnerList').innerHTML=htmlWin||'<p style="color:gray">Abhi koi winner nahi</p>';
+
+ let refs=JSON.parse(localStorage.getItem('math11_all_referrals')||'[]');
+ let htmlR=''; refs.slice(-20).reverse().forEach(r=>{ htmlR+=`<div class="item">🔗 Code <b>${r.code}</b> used by <b>${r.by}</b><br><small>${r.time}</small></div>`; });
+ document.getElementById('referList').innerHTML=htmlR||'<p style="color:gray">Koi referral nahi</p>';
+
+ let upi=localStorage.getItem('math11_user_upi')||'Not Saved'; let name=localStorage.getItem('math11_user_name')||'You';
+ document.getElementById('userList').innerHTML=`👤 ${name}<br>UPI: ${upi}`;
+}
+function approvePay(i){ let a=JSON.parse(localStorage.getItem('math11_payments')||'[]'); a.splice(i,1); localStorage.setItem('math11_payments', JSON.stringify(a)); loadAll(); alert('Approved!'); }
+function rejectPay(i){ let a=JSON.parse(localStorage.getItem('math11_payments')||'[]'); a.splice(i,1); localStorage.setItem('math11_payments', JSON.stringify(a)); loadAll(); }
+function approveW(i){ let a=JSON.parse(localStorage.getItem('math11_withdraw_requests')||'[]'); a[i].status='PAID'; localStorage.setItem('math11_withdraw_requests', JSON.stringify(a)); loadAll(); alert('Withdraw PAID Marked!'); }
+function rejectW(i){ let a=JSON.parse(localStorage.getItem('math11_withdraw_requests')||'[]'); a.splice(i,1); localStorage.setItem('math11_withdraw_requests', JSON.stringify(a)); loadAll(); }
+function payUpi(upi, amt){ if(!upi||!upi.includes('@')){alert('UPI ID galat hai');return;} window.location.href=`upi://pay?pa=${upi}&pn=Math11Winner&am=${amt}&cu=INR&tn=Math11 Prize Rs${amt}`; }
+function clearAllData(){ if(confirm('⚠️ Pura data delete karna hai? Ye wapas nahi ayega!')){ if(confirm('Final Confirm - Sab delete?')){ localStorage.clear(); alert('Sab clear!'); location.reload(); } } }
+showSavedUpi(); loadAll(); setInterval(loadAll, 5000);
+</script></body></html>
