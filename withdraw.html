@@ -1,0 +1,11 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Withdraw - Math 11</title><style>body{background:#0f172a;color:white;font-family:sans-serif;padding:20px} .card{background:#1e293b;padding:20px;border-radius:15px;margin:15px 0} button{padding:12px;background:#22c55e;color:white;border:none;border-radius:10px;font-weight:bold;width:100%} input{padding:12px;width:90%;border-radius:10px;border:none;margin:8px 0}</style></head><body>
+<h1>💸 WITHDRAW WINNING</h1>
+<div class="card"><h3>Balance: <span id="bal" style="color:#22c55e">Rs.0</span></h3><p>Min Withdraw: Rs.50</p><input id="wAmount" type="number" placeholder="Kitna nikalna hai? (50+)"><input id="wUpi" placeholder="Apna UPI ID (jaha paisa chahiye)"><button onclick="requestWithdraw()">WITHDRAW REQUEST KARO</button></div>
+<div class="card"><h3>📜 Tumhari Requests</h3><div id="myReq">Koi request nahi</div></div>
+<script>
+let bal = parseInt(localStorage.getItem('math11_wallet')||'0');
+let upi = localStorage.getItem('math11_user_upi')||'';
+document.getElementById('bal').innerText='Rs.'+bal; document.getElementById('wUpi').value=upi;
+function requestWithdraw(){ let amt=parseInt(document.getElementById('wAmount').value); let upiId=document.getElementById('wUpi').value; if(!upiId.includes('@')){alert('Sahi UPI dalo');return;} if(amt<50){alert('Min 50');return;} if(amt>bal){alert('Balance kam hai');return;} let reqs=JSON.parse(localStorage.getItem('math11_withdraw_requests')||'[]'); reqs.push({name:localStorage.getItem('math11_user_name')||'User', upi:upiId, amount:amt, status:'PENDING', time:new Date().toLocaleString()}); localStorage.setItem('math11_withdraw_requests', JSON.stringify(reqs)); localStorage.setItem('math11_wallet', bal-amt); alert('Request bheja gaya BOSS ko! 2 ghante me paisa ayega.'); location.reload(); }
+function loadMyReq(){ let reqs=JSON.parse(localStorage.getItem('math11_withdraw_requests')||'[]'); let html=''; reqs.slice(-5).reverse().forEach(r=>{ html+=`<div style="border:1px solid #333;padding:8px;margin:5px;border-radius:8px">Rs.${r.amount} to ${r.upi} - <b style="color:${r.status=='PENDING'?'orange':'green'}">${r.status}</b></div>`; }); if(html) document.getElementById('myReq').innerHTML=html; } loadMyReq();
+</script></body></html>
