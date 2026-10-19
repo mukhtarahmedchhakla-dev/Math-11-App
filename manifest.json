@@ -1,0 +1,16 @@
+{
+  "name": "MATH-11 FANTASY",
+  "short_name": "MATH-11",
+  "description": "Win ₹5000 - Fantasy Cricket",
+  "start_url": "fantasy.html",
+  "display": "standalone",
+  "background_color": "#0f1115",
+  "theme_color": "#22c55e",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2620/2620283.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
