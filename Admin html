@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Math11 Admin</title>
+</head>
+<body style="background:#111;color:white;font-family:sans-serif;padding:20px">
+<h2>Math11 - Admin Control 🔐</h2>
+<p>Password: math11@123</p>
+<input id="pass" type="password" placeholder="Password likho" style="width:100%;padding:12px"><br><br>
+<button onclick="login()" style="width:100%;padding:12px;background:yellow;font-weight:bold">LOGIN</button>
+
+<div id="panel" style="display:none;margin-top:20px">
+<h3>Contest Control</h3>
+Prize: <input id="prize" value="10000" style="width:100%;padding:10px;margin:5px 0"><br>
+Entry: <input id="entry" value="50" style="width:100%;padding:10px;margin:5px 0"><br>
+Joined: <input id="joined" value="740" style="width:100%;padding:10px;margin:5px 0"><br><br>
+<button onclick="save()" style="width:100%;padding:14px;background:#FFD600;font-weight:bold">SAVE & UPDATE APP</button>
+<p id="msg"></p>
+</div>
+
+<script>
+function login(){
+ if(document.getElementById('pass').value=='math11@123'){
+  document.getElementById('panel').style.display='block';
+ } else { alert('Galat Password'); }
+}
+function save(){
+ const data = { prize: prize.value, entry: entry.value, joined: joined.value };
+ localStorage.setItem('math11_admin', JSON.stringify(data));
+ document.getElementById('msg').innerHTML = 'Ho gaya Save! <br>Ab Prize = '+data.prize+' XP';
+}
+</script>
+</body>
+</html>
