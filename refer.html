@@ -1,0 +1,23 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Refer & Earn - Math 11</title><style>body{background:#0f172a;color:white;font-family:sans-serif;text-align:center;padding:20px} .card{background:#1e293b;padding:20px;border-radius:15px;margin:15px 0;border:1px solid gold} button{padding:12px 20px;background:#facc15;color:black;border:none;border-radius:10px;font-weight:bold;width:90%;margin:10px} input{padding:12px;width:85%;border-radius:10px;border:none;margin:10px}</style></head><body>
+<h1>💰 REFER & EARN Rs.20</h1>
+<div class="card"><h2>Tumhara Refer Code</h2><h1 id="myCode" style="color:#facc15;letter-spacing:3px">LOADING</h1><input id="referLink" readonly><button onclick="shareRefer()">SHARE WHATSAPP PE</button><button onclick="copyLink()" style="background:white">COPY LINK</button></div>
+<div class="card"><h3>🎁 Tumhari Earning</h3><h2 id="earn">Rs.0</h2><p>Har dost join karega = Rs.10 tumhe</p><p>Total Refer: <span id="totalRef">0</span> Friends</p></div>
+<div class="card"><h3>Kaise Kaam Karta Hai?</h3><p>1. Link share karo<br>2. Dost App download karke tumhara code dalega<br>3. Rs.10 turant tumhare wallet me</p></div>
+<script>
+let name = localStorage.getItem('math11_user_name')||'USER'+Math.floor(Math.random()*9999);
+let code = name.replace(/\s/g,'').toUpperCase().substring(0,6)+Math.floor(Math.random()*99);
+if(!localStorage.getItem('math11_my_refer_code')) localStorage.setItem('math11_my_refer_code', code);
+let myCode = localStorage.getItem('math11_my_refer_code');
+document.getElementById('myCode').innerText = myCode;
+let link = 'https://mukhtarahmedchhakla-dev.github.io/Math-11-App/?ref='+myCode;
+document.getElementById('referLink').value = link;
+let refs = JSON.parse(localStorage.getItem('math11_my_refers')||'[]');
+document.getElementById('totalRef').innerText = refs.length;
+document.getElementById('earn').innerText = 'Rs.'+(refs.length*10);
+function shareRefer(){ window.open('https://wa.me/?text='+encodeURIComponent('Math 11 App khelo aur jeeto! Mera Refer Code: '+myCode+' Link: '+link)); }
+function copyLink(){ navigator.clipboard.writeText(link); alert('Link Copied BOSS!'); }
+// Check if coming from refer
+let urlParams = new URLSearchParams(window.location.search);
+let refBy = urlParams.get('ref');
+if(refBy && refBy!=myCode && !localStorage.getItem('math11_used_ref')){ localStorage.setItem('math11_used_ref', refBy); let allRefs=JSON.parse(localStorage.getItem('math11_all_referrals')||'[]'); allRefs.push({code:refBy, by:name, time:new Date().toLocaleString()}); localStorage.setItem('math11_all_referrals', JSON.stringify(allRefs)); alert('Refer Code Applied: '+refBy+' - Rs.10 bonus milega!'); }
+</script></body></html>
