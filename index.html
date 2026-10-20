@@ -1,4 +1,42 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MATH CLASH</title><script src="https://cdn.tailwindcss.com"></script></head>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MATH CLASH - Dream11</title><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800&display=swap" rel="stylesheet"><style>body{font-family:Inter;max-width:420px;margin:0 auto;background:#fff}</style></head>
+<body class="bg-white pb-16">
+<!-- RED HEADER LIKE PHOTO -->
+<div class="bg-[#c00020] text-white p-3 flex justify-between items-center"><div class="flex items-center gap-2"><div class="bg-white text-[#c00020] font-black px-2 py-1 rounded text-xs">MC</div><div><div class="font-black text-[12px] leading-3">MATH CLASH</div><div class="text-[9px]">DREAM11</div></div></div><div class="flex gap-3 text-lg">🔔 ▭</div></div>
+
+<!-- BANNER LIKE PHOTO -->
+<div class="bg-white border-b p-3 flex items-center justify-between"><div class="flex items-center gap-2"><div class="bg-[#c00020] text-white font-black text-[10px] px-2 py-1 rounded">MC</div><div class="text-[11px] font-bold">Math Clash11</div></div><div class="flex items-center gap-2"><img src="https://i.ibb.co/3mQ5z0z/cricket.png" class="w-12 h-8 object-contain" onerror="this.style.display='none'"><div class="text-[8px] font-black">PLAY WIN<br>SLEEP REPEAT</div></div></div>
+
+<!-- UPCOMING MATCHES TITLE -->
+<div class="p-3 flex justify-between items-center"><b class="text-[13px]">Upcoming Matches</b><div class="border px-2 py-1 rounded text-[10px]">▼</div></div>
+
+<!-- MATCHES LIST - EXACT LIKE YOUR PHOTO -->
+<div id="list" class="px-3 space-y-3"></div>
+
+<!-- BOTTOM NAV LIKE PHOTO -->
+<div class="fixed bottom-0 w-full max-w-[420px] bg-white border-t flex justify-around py-2 text-[9px]"><div class="text-center text-[#c00020]"><div>⌂</div>Home</div><div class="text-center text-gray-400"><div>◫</div>My Matches</div><div class="text-center text-gray-400"><div>👤</div>My Account</div></div>
+
+<script>
+let matches=[
+{league:"Algebra Championship, 2025",team1:"ALG",team1Name:"Algebra",team2:"CAL",team2Name:"Calculus",time:"2h 5m 56s",time2:"08:00 PM",prize:"Mega ₹5000 Contest"},
+{league:"Arithmetic tour of Bangladesh, 2025",team1:"ARI",team1Name:"Arithmetic",team2:"GEO",team2Name:"Geometry",time:"4h 35m 56s",time2:"10:30 PM",prize:"Mega ₹5000 Contest"},
+{league:"Womens Big Bash Math League, 2025",team1:"ALG-W",team1Name:"Algebra Women",team2:"CAL-W",team2Name:"Calculus Women",time:"9h 15m 56s",time2:"03:10 AM",prize:"Mega ₹5000 Contest"},
+{league:"Nepal Premier Math League, 2025",team1:"KMG",team1Name:"Kathmandu",team2:"SPR",team2Name:"Sudurpaschim",time:"11h 20m 56s",time2:"05:15 AM",prize:"Mega ₹5000 Contest"},
+];
+let h='';
+matches.forEach(m=>{
+h+=`<div class="border rounded-lg p-3 shadow-sm">
+<div class="text-[10px] text-gray-500">${m.league}</div>
+<div class="flex justify-between items-center mt-2">
+<div class="text-center"><div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-[10px] font-black">${m.team1[0]}</div><div class="text-[10px] font-bold mt-1">${m.team1}</div><div class="text-[8px] text-gray-500">${m.team1Name}</div></div>
+<div class="text-center"><div class="text-[10px] text-red-600 font-bold">${m.time}</div><div class="text-[8px] text-gray-500">⏱ ${m.time2}</div></div>
+<div class="text-center"><div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-[10px] font-black">${m.team2[0]}</div><div class="text-[10px] font-bold mt-1">${m.team2}</div><div class="text-[8px] text-gray-500">${m.team2Name}</div></div>
+</div>
+<div class="flex justify-between items-center mt-3"><div class="text-[10px] text-gray-500">${m.prize}</div><button class="bg-[#c00020] text-white w-6 h-6 rounded-full flex items-center justify-center">></button></div>
+</div>`;
+});
+document.getElementById('list').innerHTML=h;
+</script>
+</body></html>!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MATH CLASH</title><script src="https://cdn.tailwindcss.com"></script></head>
 <body class="bg-[#f5f5f5] max-w-[480px] mx-auto">
 <div class="bg-[#d2001f] p-4 flex justify-between text-white"><div class="font-black text-[22px] leading-5">MATH<br>CLASH</div><div class="bg-[#a80019] px-3 py-1 rounded-full">₹ <span id=bal>180</span></div></div>
 <div class="bg-white flex rounded-t-[20px] mt-[-10px]"><div class="flex-1 py-4 text-center font-black text-[#d2001f] border-b-2 border-[#d2001f]">Algebra</div><div class="flex-1 py-4 text-center text-gray-400">Calculus</div><div class="flex-1 py-4 text-center text-gray-400">Arithmetic</div></div>
