@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OWNER CONTROL - MATH 11 PRO</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-[#0a0a0a] text-white min-h-screen p-4 font-sans">
+<div id="loginScreen" class="max-w-md mx-auto mt-20 bg-zinc-900 p-8 rounded-2xl border border-yellow-400/20">
+<h1 class="text-2xl font-black text-yellow-400 text-center">MATH-11 PRO</h1>
+<p class="text-center text-zinc-400 text-sm mt-1">OWNER ONLY ACCESS</p>
+<p class="text-center text-[10px] text-zinc-500 mt-1">Mukhtarahmedchhakla@gmail.com</p>
+<input id="email" type="email" value="Mukhtarahmedchhakla@gmail.com" class="w-full mt-6 p-3 bg-black rounded-xl border border-zinc-800" readonly>
+<input id="password" type="password" placeholder="Owner Password" class="w-full mt-3 p-3 bg-black rounded-xl border border-zinc-800">
+<button onclick="ownerLogin()" class="w-full mt-4 bg-yellow-400 text-black py-3 rounded-xl font-black">UNLOCK FULL CONTROL</button>
+<p id="msg" class="text-center text-sm mt-3 text-red-400"></p>
+</div>
+
+<div id="controlScreen" class="hidden max-w-5xl mx-auto">
+<div class="bg-yellow-400 text-black p-4 rounded-2xl flex justify-between items-center">
+<div><h1 class="font-black text-xl">WELCOME OWNER</h1><p class="text-xs font-bold">Mukhtarahmedchhakla@gmail.com - FULL ACCESS</p></div>
+<button onclick="logout()" class="bg-black text-white px-4 py-2 rounded-lg text-sm">Logout</button>
+</div>
+
+<div class="grid md:grid-cols-2 gap-4 mt-6">
+<!-- SETTINGS -->
+<div class="bg-zinc-900 p-5 rounded-2xl">
+<h2 class="font-bold text-yellow-400">⚙️ App Settings - Aap Khud Badlo</h2>
+<input id="appName" placeholder="App Name" class="w-full mt-3 p-3 bg-black rounded-lg">
+<input id="banner" placeholder="Top Banner Offer Text" class="w-full mt-2 p-3 bg-black rounded-lg">
+<input id="logo" placeholder="Logo Image URL" class="w-full mt-2 p-3 bg-black rounded-lg">
+<select id="maintenance" class="w-full mt-2 p-3 bg-black rounded-lg"><option value="false">App LIVE</option><option value="true">Maintenance ON - App Band</option></select>
+<button onclick="saveSettings()" class="w-full mt-3 bg-yellow-400 text-black py-3 rounded-xl font-bold">SAVE - LIVE KARO</button>
+</div>
+
+<!-- CONTEST -->
+<div class="bg-zinc-900 p-5 rounded-2xl">
+<h2 class="font-bold text-green-400">🏆 Contest Create - FREE ONLY</h2>
+<input id="cTitle" placeholder="Contest Name - Ex: Class 12 Maths Test" class="w-full mt-3 p-3 bg-black rounded-lg">
+<input id="cCoins" type="number" placeholder="Prize Coins - Ex: 1000" class="w-full mt-2 p-3 bg-black rounded-lg">
+<input id="cEntry" type="number" placeholder="Entry Coins - Ex: 50" class="w-full mt-2 p-3 bg-black rounded-lg">
+<button onclick="createContest()" class="w-full mt-3 bg-green-500 text-black py-3 rounded-xl font-bold">CREATE CONTEST</button>
+<p class="text-[10px] text-zinc-500 mt-2">Legal Note: Real Money OFF hai, sirf Virtual Coins</p>
+</div>
+</div>
+
+<div class="bg-zinc-900 p-5 rounded-2xl mt-4">
+<h2 class="font-bold">📝 Questions Add Karo</h2>
+<textarea id="q" placeholder="Question?" class="w-full mt-3 p-3 bg-black rounded-lg"></textarea>
+<div class="grid grid-cols-2 gap-2 mt-2">
+<input id="a" placeholder="Option A" class="p-3 bg-black rounded-lg"><input id="b" placeholder="Option B" class="p-3 bg-black rounded-lg">
+<input id="c" placeholder="Option C" class="p-3 bg-black rounded-lg"><input id="d" placeholder="Option D" class="p-3 bg-black rounded-lg">
+</div>
+<select id="correct" class="w-full mt-2 p-3 bg-black rounded-lg"><option value="A">Correct: A</option><option value="B">Correct: B</option><option value="C">Correct: C</option><option value="D">Correct: D</option></select>
+<button onclick="addQ()" class="w-full mt-3 bg-blue-500 py-3 rounded-xl font-bold">ADD QUESTION TO DB</button>
+</div>
+
+<div class="bg-zinc-900 p-5 rounded-2xl mt-4">
+<h2 class="font-bold">📊 Audit Log - Aapka Control Proof</h2>
+<div id="logs" class="text-xs text-zinc-400 mt-2">Loading...</div>
+</div>
+</div>
+
+<script>
+const OWNER_EMAIL = "Mukhtarahmedchhakla@gmail.com";
+const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+const SUPABASE_KEY = "YOUR_ANON_KEY";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function ownerLogin(){
+ const email = document.getElementById('email').value.trim();
+ const password = document.getElementById('password').value.trim();
+ if(email !== OWNER_EMAIL){ document.getElementById('msg').innerText = "Access Denied - Sirf Owner Login Kar Sakte Hain"; return; }
+ const {data, error} = await supabaseClient.auth.signInWithPassword({email, password});
+ if(error){ document.getElementById('msg').innerText = error.message; return; }
+ document.getElementById('loginScreen').classList.add('hidden');
+ document.getElementById('controlScreen').classList.remove('hidden');
+ loadLogs();
+}
+async function saveSettings(){
+ const payload = { app_name: document.getElementById('appName').value, banner_text: document.getElementById('banner').value, logo_url: document.getElementById('logo').value, maintenance: document.getElementById('maintenance').value === 'true', updated_by: OWNER_EMAIL };
+ const {error} = await supabaseClient.from('app_settings').upsert({id:1, ...payload});
+ await supabaseClient.from('audit_logs').insert({action:'UPDATE_SETTINGS', by_user:OWNER_EMAIL, details: JSON.stringify(payload)});
+ alert(error ? error.message : 'Settings LIVE Ho Gayi! ✅');
+}
+async function createContest(){
+ const payload = { title: document.getElementById('cTitle').value, prize_coins: document.getElementById('cCoins').value, entry_coins: document.getElementById('cEntry').value, type:'free', status:'live', created_by: OWNER_EMAIL };
+ const {error} = await supabaseClient.from('contests').insert(payload);
+ await supabaseClient.from('audit_logs').insert({action:'CREATE_CONTEST', by_user:OWNER_EMAIL, details: payload.title});
+ alert(error ? error.message : 'Contest Created! ✅');
+}
+async function addQ(){
+ const payload = { question: document.getElementById('q').value, option_a: document.getElementById('a').value, option_b: document.getElementById('b').value, option_c: document.getElementById('c').value, option_d: document.getElementById('d').value, correct_option: document.getElementById('correct').value, created_by: OWNER_EMAIL };
+ const {error} = await supabaseClient.from('questions').insert(payload);
+ await supabaseClient.from('audit_logs').insert({action:'ADD_QUESTION', by_user:OWNER_EMAIL});
+ alert(error ? error.message : 'Question Added! ✅');
+}
+async function loadLogs(){
+ const {data} = await supabaseClient.from('audit_logs').select('*').order('created_at', {ascending:false}).limit(10);
+ document.getElementById('logs').innerHTML = data?.map(l=> `<div>${l.created_at} - ${l.action} by ${l.by_user}</div>`).join('') || 'No logs';
+}
+function logout(){ supabaseClient.auth.signOut(); location.reload(); }
+</script>
+</body>
+</html>
