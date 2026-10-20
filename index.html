@@ -1,4 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MATH-11 SPECIAL</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#0a0a0a;color:#fff}
+.header{background:#111;padding:16px;display:flex;justify-content:space-between;border-bottom:1px solid #222}
+.logo{font-weight:900;font-size:22px}.logo span{color:#ffcc00}
+.wallet{background:#1e1e1e;padding:8px 14px;border-radius:20px;border:1px solid #333}
+.tabs{display:flex;background:#111;padding:8px;gap:8px}
+.tab{flex:1;padding:10px;text-align:center;border-radius:10px;background:#1e1e1e;color:#888}
+.tab.active{background:#ffcc00;color:#000}
+.card{background:#151515;margin:12px;border-radius:16px;padding:16px;border:1px solid #222}
+.btn{width:100%;padding:14px;background:#ffcc00;color:#000;border:none;border-radius:12px;font-weight:800;margin-top:10px}
+input,textarea{width:100%;padding:12px;background:#1e1e1e;border:1px solid #333;border-radius:10px;color:#fff;margin:6px 0}
+.opt{background:#1e1e1e;border:1px solid #333;padding:14px;border-radius:12px;margin:8px 0}
+</style>
+</head>
+<body>
+<div class="header">
+<div class="logo">MATH-<span>11</span></div>
+<div class="wallet">₹ <b id="bal">250</b></div>
+</div>
+<div class="tabs">
+<div class="tab active" id="t-play" onclick="switchTab('play')">PLAY</div>
+<div class="tab" id="t-admin" onclick="switchTab('admin')">ADMIN</div>
+<div class="tab" id="t-leader" onclick="switchTab('leader')">WINNERS</div>
+</div>
+<div id="playTab"><div id="homeList"></div><div id="quizBox" style="display:none"></div><div id="resultBox" style="display:none"></div></div>
+<div id="adminTab" style="display:none">
+<div class="card">
+<h3>New Contest</h3>
+<input id="cName" placeholder="Contest Name">
+<input id="cFee" type="number" placeholder="Entry Fee 49">
+<input id="cPrize" type="number" placeholder="Prize 5000">
+</div>
+<div id="qInputs"></div>
+<div style="padding:12px">
+<button onclick="addQInput()" style="width:100%;padding:12px;background:#222;color:#fff;border-radius:10px">+ Add Question</button>
+<button class="btn" onclick="publishContest()">PUBLISH CONTEST</button>
+</div>
+<div id="savedList"></div>
+</div>
+<div id="leaderTab" style="display:none"><div class="card"><div id="leaderList"></div></div></div>
 <script>
+let balance=parseInt(localStorage.getItem('m11_bal')||'250');
+let contests=JSON.parse(localStorage.getItem('m11_contests')||'[]');
+let history=JSON.parse(localStorage.getItem('m11_history')||'[]');
+let qCount=0,curContest=null,curIdx=0,curScore=0;
+document.getElementById('bal').innerText=balance;
+function switchTab(t){
+document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+document.getElementById('t-'+t).classList.add('active');
+document.getElementById('playTab').style.display=t=='play'?'block':'none';
+document.getElementById('adminTab').style.display=t=='admin'?'block':'none';
+document.getElementById('leaderTab').style.display=t=='leader'?'block':'none';
+if(t=='play')renderHome();if(t=='admin')renderAdmin();if(t=='leader')renderLeader();
+}
+function addQInput(){
+qCount++;
+document.getElementById('qInputs').innerHTML+=`<div class="card"><b>Q${qCount}</b><textarea id="q_${qCount}" placeholder="Question"></textarea><input id="ans_${qCount}" placeholder="Correct Answer"><input id="op1_${qCount}" placeholder="Option 2"><input id="op2_${qCount}" placeholder="Option 3"><input id="op3_${qCount}" placeholder="Option 4"></div>`;
+}
+function publishContest(){
+let name=document.getElementById('cName').value;
+let fee=parseInt(document.getElementById('cFee').value||0);
+let prize=parseInt(document.getElementById('cPrize').value||0);
+let qs=[];for(let i=1;i<=qCount;i++){let el=document.getElementById(`q_${i}`);if(!el)continue;qs.push({q:el.value,ans:document.getElementById(`ans_${i}`).value,o1:document.getElementById(`op1_${i}`).value,o2:document.getElementById(`op2_${i}`).value,o3:document.getElementById(`op3_${i}`).value})}
+let contest={id:Date.now(),name,fee,prize,questions:qs,created:new Date().toLocaleString()};
+contests.unshift(contest);localStorage.setItem('m11_contests',JSON.stringify(contests));alert('Publish Ho Gaya!');switchTab('play');
+}
+function renderHome(){
+let box=document.getElementById('homeList');
+if(contests.length==0){box.innerHTML=`<div class="card">No Contest. ADMIN me banao.</div>`;return;}
+box.innerHTML=contests.map(c=>`<div class="card"><b>${c.name}</b><p>Entry ₹${c.fee} | Prize ₹${c.prize}</p><button class="btn" onclick="startGame(${c.id})">JOIN NOW</button></div>`).join('');
+}
+function startGame(id){curContest=contests.find(x=>x.id==id);if(balance<curContest.fee){alert('Balance kam');return;}balance-=curContest.fee;localStorage.setItem('m11_bal',balance);document.getElementById('bal').innerText=balance;curIdx=0;curScore=0;document.getElementById('homeList').style.display='none';document.getElementById('quizBox').style.display='block';showQ();}
+function showQ(){let q=curContest.questions[curIdx];let opts=[q.ans,q.o1,q.o2,q.o3].filter(x=>x).sort(()=>Math.random()-0.5);document.getElementById('quizBox').innerHTML=`<div class="card"><p>Q ${curIdx+1}/${curContest.questions.length} - ${curScore} pts</p><h3>${q.q}</h3>${opts.map(o=>`<div class="opt" onclick="ansQ('${o.replace(/'/g,"\\'")}')">${o}</div>`).join('')}</div>`;}
+function ansQ(txt){if(txt==curContest.questions[curIdx].ans)curScore+=10;curIdx++;if(curIdx>=curContest.questions.length){finishGame();}else showQ();}
+function finishGame(){let win=curScore>=curContest.questions.length*7?curContest.prize:0;if(win>0){balance+=win;localStorage.setItem('m11_bal',balance);}document.getElementById('quizBox').style.display='none';document.getElementById('resultBox').style.display='block';document.getElementById('resultBox').innerHTML=`<div class="card" style="text-align:center"><h2>${win>0?'WINNER!':'Over'}</h2><h1>${curScore}</h1><p>${win>0?'Jeete ₹'+win:'Try Again'}</p><button class="btn" onclick="location.reload()">Back</button></div>`;document.getElementById('bal').innerText=balance;}
+function renderAdmin(){document.getElementById('savedList').innerHTML=`<div class="card">${contests.map(c=>`<div>${c.name} <span onclick="deleteC(${c.id})" style="color:red;float:right">Delete</span></div>`).join('')}</div>`;}
+function deleteC(id){contests=contests.filter(x=>x.id!=id);localStorage.setItem('m11_contests',JSON.stringify(contests));renderAdmin();renderHome();}
+function renderLeader(){}
+for(let i=0;i<3;i++)addQInput();renderHome();
+</script>
+</body>
+</html>script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/Math-11-App/sw.js');
 }
